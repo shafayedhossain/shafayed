@@ -39,8 +39,13 @@ function toggleStyle(id){
     selected.classList.add('bg-blue-500', 'text-black')
 
   if(id == 'interview-filter-btn'){
-    
-  }
+    allCardSelection.classList.add('hidden');
+    filterSection.classList.remove('hidden')
+  } else if(id =='all-filter-btn'){
+
+      allCardSelection.classList.remove('hidden');
+      filterSection.classList.add('hidden')
+    }
 
 }
 
@@ -62,7 +67,9 @@ const dollar = parentNode.querySelector('.dollar').innerText;
 const status = parentNode.querySelector('.status').innerText;
 const notes = parentNode.querySelector('.notes').innerText;
 
-    console.log(parentNode, mobileName, latinName, remote, time,dollar, status,notes)
+ parentNode.querySelector('.status').innerText = 'interview'
+
+    console.log(parentNode, mobileName, latinName, remote, time, dollar, status,notes)
 
 
 const cardInfo ={
@@ -71,7 +78,7 @@ const cardInfo ={
     remote,
     time,
     dollar,
-    status,
+    status:'interview',
     notes
 }
 // interviewList.find(item.mobileName == cardInfo.mobileName)
@@ -79,6 +86,7 @@ const mobileExist = interviewList.find(item=> item.mobileName == cardInfo.mobile
 if(!mobileExist){
     interviewList.push(cardInfo)
 }
+  calculateCount();
 
     renderInterview();
 
@@ -102,7 +110,7 @@ function renderInterview(){
   div.className = 'card flex justify-between border border-0 p-8 shadow mb-3'
   div.innerHTML = `  <div class="space-y-5">
              <div>
-            <h1 class="mobileName text-4xl">Mobile First Corp</h1>
+            <h1 class="mobileName text-4xl">${interview.mobileName}</h1>
             <p class="latinName">React Native Developer</p>
             </div>
             <div class="flex gap-3 text-gray-400">
@@ -111,7 +119,7 @@ function renderInterview(){
                 <p class="dollar">• $130,000 - $175,000</p>
             </div>
            <div>
-             <p class="status text-gray-500 w-[9rem] bg-gray-100 px-4 py-2">Not Applied</p>
+             <p class="status text-gray-500 w-[9rem] bg-gray-100 px-4 py-2">${interview.status}</p>
             <p class="notes">Build cross-platform mobile applications using React Native. Work on products used by millions of users worldwide.</p>
            
            </div>
