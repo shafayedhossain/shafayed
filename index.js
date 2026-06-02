@@ -1,5 +1,6 @@
 let interviewList = [];
 let rejectedList = [];
+let currentStatus = 'all'
 
 
 
@@ -33,6 +34,7 @@ function toggleStyle(id){
     rejectfilterBtn.classList.add('bg-gray-300','text-black')
 
     const selected = document.getElementById(id)
+    currentStatus = id
     // console.log(selected)
 
     selected.classList.remove('bg-gray-300', 'text-white')
@@ -40,11 +42,17 @@ function toggleStyle(id){
 
   if(id == 'interview-filter-btn'){
     allCardSelection.classList.add('hidden');
-    filterSection.classList.remove('hidden')
+    filterSection.classList.remove('hidden');
+    renderinterview();
   } else if(id =='all-filter-btn'){
 
       allCardSelection.classList.remove('hidden');
       filterSection.classList.add('hidden')
+    }
+    else if(id=='reject-filter-btn'){
+      allCardSelection.classList.add('hidden');
+    filterSection.classList.remove('hidden')
+    renderRejected();
     }
 
 }
@@ -84,24 +92,122 @@ const cardInfo ={
 // interviewList.find(item.mobileName == cardInfo.mobileName)
 const mobileExist = interviewList.find(item=> item.mobileName == cardInfo.mobileName);
 if(!mobileExist){
-    interviewList.push(cardInfo)
+   interviewList.push(cardInfo)
 }
-  calculateCount();
 
-    renderInterview();
+calculateCount();
+
+rejectedList = rejectedList.filter(item=> item.mobileName != cardInfo.mobileName)
+
+if(currentStatus == 'reject-filter-btn'){
+  renderRejected();
+}
+    
 
     }
-})
 
+  
+  
+  else if(event.target.classList.contains('reject')){
+    
+       const parentNode = event.target.parentNode.parentNode ;
+const mobileName = parentNode.querySelector('.mobileName').innerText;
+const latinName = parentNode.querySelector('.latinName').innerText;
+const remote = parentNode.querySelector('.remote').innerText;
+const time = parentNode.querySelector('.time').innerText;
+const dollar = parentNode.querySelector('.dollar').innerText;
+const status = parentNode.querySelector('.status').innerText;
+const notes = parentNode.querySelector('.notes').innerText;
+
+ parentNode.querySelector('.status').innerText = 'rejected'
+
+    console.log(parentNode, mobileName, latinName, remote, time, dollar, status,notes)
+
+
+const cardInfo ={
+    mobileName,
+    latinName,
+    remote,
+    time,
+    dollar,
+    status:'rejected',
+    notes
+}
+// interviewList.find(item.mobileName == cardInfo.mobileName)
+const mobileExist = rejectedList.find(item=> item.mobileName == cardInfo.mobileName);
+if(!mobileExist){
+      rejectedList.push(cardInfo)
+}  
+
+interviewList= interviewList.filter(item=> item.mobileName != cardInfo.mobileName)
+  
+if(currentStatus == 'interview-filter-btn' ){
+  renderinterview();
+}
+calculateCount();
+
+   
+
+    
+      }
+})
+                         
+                                   // Rejected Parts 
+
+// maincontainer.addEventListener('click',function(event){
+//    const rejectBtn = event.target.closest('.reject');
+    
+// console.log(!!rejectBtn);
+// // console.log(event.target.parentNode)
+   
+
+//    if(rejectBtn){
+   
+//         const parentNode = event.target.parentNode.parentNode ;
+// const mobileName = parentNode.querySelector('.mobileName').innerText;
+// const latinName = parentNode.querySelector('.latinName').innerText;
+// const remote = parentNode.querySelector('.remote').innerText;
+// const time = parentNode.querySelector('.time').innerText;
+// const dollar = parentNode.querySelector('.dollar').innerText;
+// const status = parentNode.querySelector('.status').innerText;
+// const notes = parentNode.querySelector('.notes').innerText;
+
+//  parentNode.querySelector('.status').innerText = 'rejected'
+
+//     console.log(parentNode, mobileName, latinName, remote, time, dollar, status,notes)
+
+
+// const cardInfo ={
+//     mobileName,
+//     latinName,
+//     remote,
+//     time,
+//     dollar,
+//     status:'rejected',
+//     notes
+// }
+// // interviewList.find(item.mobileName == cardInfo.mobileName)
+// const mobileExist = rejectedList.find(item=> item.mobileName == cardInfo.mobileName);
+// if(!mobileExist){
+//       rejectedList.push(cardInfo)
+// }  
+
+
+//   calculateCount();
+
+//     renderRejected();
+
+//     }
+// })
 
    
 
 
 
+                           // interview Parts  
 
 
-
-function renderInterview(){
+function renderinterview(){
   filterSection.innerHTML = ''
   
   for(let interview of interviewList){
@@ -120,6 +226,45 @@ function renderInterview(){
             </div>
            <div>
              <p class="status text-gray-500 w-[9rem] bg-gray-100 px-4 py-2">${interview.status}</p>
+            <p class="notes">Build cross-platform mobile applications using React Native. Work on products used by millions of users worldwide.</p>
+           
+           </div>
+           <div class="flex gap-3">
+            <button class="enter text-green-500 px-4 py-2 border border-2">Interview</button>
+            <button class="reject text-red-500 px-4 py-2 border border-2">Rejected</button>
+           </div>
+   </div>
+   <!-- right side  -->
+   <div>
+ <button class="delete-btn w-[2.5rem] rounded-full border border-gray-400 px-2.5 py-2.5"><i class="fa-regular fa-trash-can"></i></button>
+   </div>
+  `
+  filterSection.appendChild(div)
+}
+}
+
+                            // Rejected Parts  
+
+function renderRejected(){
+  filterSection.innerHTML = ''
+  
+  for(let rejected of rejectedList){
+    console.log(rejected);
+    let div = document.createElement('div')
+ 
+    div.className = 'card flex justify-between border border-0 p-8 shadow mb-3'
+  div.innerHTML = `  <div class="space-y-5">
+             <div>
+            <h1 class="mobileName text-4xl">${rejected.mobileName}</h1>
+            <p class="latinName">React Native Developer</p>
+            </div>
+            <div class="flex gap-3 text-gray-400">
+                <p class="remote">Remote</p>
+                <p class="time">• Full-time </p>
+                <p class="dollar">• $130,000 - $175,000</p>
+            </div>
+           <div>
+             <p class="status text-gray-500 w-[9rem] bg-gray-100 px-4 py-2">${rejected.status}</p>
             <p class="notes">Build cross-platform mobile applications using React Native. Work on products used by millions of users worldwide.</p>
            
            </div>
